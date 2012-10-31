@@ -5,7 +5,7 @@
 ## Installation directory. By default, go in /usr/local.
 ## Distributions should probably use /, but they probably know better...
 ifndef PREFIX
-  PREFIX = /usr/local
+  PREFIX = /usr
 endif
 
 ## Compiler to use (modify this for cross compile).
@@ -74,7 +74,7 @@ DYNAMIC_LINK= libiw.so
 INSTALL_DIR= $(PREFIX)/sbin/
 INSTALL_LIB= $(PREFIX)/lib/
 INSTALL_INC= $(PREFIX)/include/
-INSTALL_MAN= $(PREFIX)/man/
+INSTALL_MAN= $(PREFIX)/share/man/
 
 # Various commands
 RM = rm -f
@@ -159,41 +159,41 @@ install:: $(IWLIB_INSTALL) install-bin install-hdr install-man
 
 # Install the dynamic library
 install-dynamic:: $(DYNAMIC)
-	install -m 755 -d $(INSTALL_LIB)
-	install -m 755 $(DYNAMIC) $(INSTALL_LIB)
-	ln -sfn $(DYNAMIC) $(INSTALL_LIB)/$(DYNAMIC_LINK)
-	@echo "*** Don't forget to add $(INSTALL_LIB) to /etc/ld.so.conf, and run ldconfig as root. ***"
+	install -m 755 -d $(DESTDIR)$(INSTALL_LIB)
+	install -m 755 $(DYNAMIC) $(DESTDIR)$(INSTALL_LIB)
+	ln -sfn $(DYNAMIC) $(DESTDIR)$(INSTALL_LIB)/$(DYNAMIC_LINK)
+	@echo "*** Don't forget to add $(DESTDIR)$(INSTALL_LIB) to /etc/ld.so.conf, and run ldconfig as root. ***"
 	@$(LDCONFIG) || echo "*** Could not run ldconfig ! ***"
 
 # Install the static library
 install-static:: $(STATIC)
-	install -m 755 -d $(INSTALL_LIB)
-	install -m 644 $(STATIC) $(INSTALL_LIB)
+	install -m 755 -d $(DESTDIR)$(INSTALL_LIB)
+	install -m 644 $(STATIC) $(DESTDIR)$(INSTALL_LIB)
 
 # All the binaries. Careful, no dependancy on install-dynamic
 install-bin:: all
-	install -m 755 -d $(INSTALL_DIR)
-	install -m 755 $(PROGS) $(INSTALL_DIR)
+	install -m 755 -d $(DESTDIR)$(INSTALL_DIR)
+	install -m 755 $(PROGS) $(DESTDIR)$(INSTALL_DIR)
 
 # Headers to go with the wireless lib (dev)
 install-hdr:: wireless.h
-	install -m 755 -d $(INSTALL_INC)
-	install -m 644 iwlib.h $(INSTALL_INC)
-	install -m 644 wireless.h $(INSTALL_INC)
+	install -m 755 -d $(DESTDIR)$(INSTALL_INC)
+	install -m 644 iwlib.h $(DESTDIR)$(INSTALL_INC)
+	install -m 644 wireless.h $(DESTDIR)$(INSTALL_INC)
 
 # How could you live without those manapages ?
 install-man::
-	install -m 755 -d $(INSTALL_MAN)/man8/
-	install -m 644 $(MANPAGES8) $(INSTALL_MAN)/man8/
-	install -m 755 -d $(INSTALL_MAN)/man7/
-	install -m 644 $(MANPAGES7) $(INSTALL_MAN)/man7/
-	install -m 755 -d $(INSTALL_MAN)/man5/
-	install -m 644 $(MANPAGES5) $(INSTALL_MAN)/man5/
+	install -m 755 -d $(DESTDIR)$(INSTALL_MAN)/man8/
+	install -m 644 $(MANPAGES8) $(DESTDIR)$(INSTALL_MAN)/man8/
+	install -m 755 -d $(DESTDIR)$(INSTALL_MAN)/man7/
+	install -m 644 $(MANPAGES7) $(DESTDIR)$(INSTALL_MAN)/man7/
+	install -m 755 -d $(DESTDIR)$(INSTALL_MAN)/man5/
+	install -m 644 $(MANPAGES5) $(DESTDIR)$(INSTALL_MAN)/man5/
 
 install-iwmulticall:: iwmulticall
-	install -m 755 -d $(INSTALL_DIR)
-	install -m 755 $< $(INSTALL_DIR)/iwconfig
-	( cd $(INSTALL_DIR) ; \
+	install -m 755 -d $(DESTDIR)$(INSTALL_DIR)
+	install -m 755 $< $(DESTDIR)$(INSTALL_DIR)/iwconfig
+	( cd $(DESTDIR)$(INSTALL_DIR) ; \
 	  ln -f -s iwconfig iwlist ; \
 	  ln -f -s iwconfig iwspy ; \
 	  ln -f -s iwconfig iwpriv ; \
